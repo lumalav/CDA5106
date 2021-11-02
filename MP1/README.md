@@ -1,24 +1,28 @@
 ## Getting Started
 
-To build and execute from the command line
+To build from the command line:
 
-> From Unix command line: 
+- From Unix command line: 
 
-`cd MP1`
+> `cd MP1`
 
-`make`
+> `make`
 
-> From Windows command line:
+- From Windows command line:
 
-- Please alter the makefile and make sure the folder character is the back-slash '\' and try again
+Please alter the makefile and make sure the folder character is the back-slash '\\' and try again
 
-> To Execute:
+To Execute:
 
-- `java -cp sim_cache.jar Simulator.MP1 'args''` (For instance: java -cp sim_cache.jar Simulator.MP1 16 1024 2 0 0 0 0 gcc_trace.txt)
+> `java -cp sim_cache.jar Simulator.MP1 'args'` 
 
-> To clean:
+Example:
 
-`make clean`
+> `java -cp sim_cache.jar Simulator.MP1 16 1024 2 0 0 0 0 gcc_trace.txt`
+
+To clean:
+
+> `make clean`
 
 To build and execute from Visual Studio code
 
@@ -26,6 +30,10 @@ To build and execute from Visual Studio code
 
 Experiments:
 
-Dependencies:
+> At the moment, the experiments can only be built and run from Visual Studio Code
+
+Dependencies for the Experiments:
 
 > [XChart](https://github.com/knowm/XChart)
+
+
