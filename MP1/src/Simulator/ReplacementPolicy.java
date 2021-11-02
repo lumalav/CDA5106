@@ -3,6 +3,10 @@ package Simulator;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * This class does most of the heavy work, loops recursively trough the operations and executes them. 
+ * It also keeps track of the metrics of the cache
+ */
 public abstract class ReplacementPolicy {
 
     protected OperationsPreprocessor OperationsPreprocessorThread;
@@ -12,16 +16,32 @@ public abstract class ReplacementPolicy {
     protected CountDownLatch Latch;
     protected ArrayList<Hashtable<Operation, Tuple<Integer, String>>> OperationsTable;
     
+    /**
+     * Constructor
+     * @param arguments
+     */
     public ReplacementPolicy(Arguments arguments) {
         this.Arguments = arguments;
     }
 
+    /**
+     * Methods that are overriden in the specific replacement policies
+     * @param index
+     * @param column
+     */
     protected abstract void Hit(int index, int column);
     protected abstract void Allocate(int index, int column);
     protected abstract Block EvictAndReplace(int index, String tag, Operation op);
     protected abstract void Evict(int index, Operation op);
     protected abstract String ReplacementPolicyName();
 
+    /**
+     * Execution method. Recursively runs the operations on every cache if needed
+     * @param cache
+     * @param op
+     * @return
+     * @throws Exception
+     */
     public Tuple<Execution, Block> Execute(Cache cache, Operation op) throws Exception {
 
         this.Cache = cache;
@@ -91,6 +111,11 @@ public abstract class ReplacementPolicy {
     }
 
 
+    /**
+     * writebacks counter
+     * @param op
+     * @param a
+     */
     public void CountWriteBack(Operation op, ArithmeticOperation a) {
         if(a == ArithmeticOperation.Add) {
             this.Cache.WriteBacks++;
@@ -100,6 +125,11 @@ public abstract class ReplacementPolicy {
         this.Cache.WriteBacks--;
     } 
 
+    /**
+     * operation counter
+     * @param op
+     * @param a
+     */
     private void CountOperation(Operation op, ArithmeticOperation a) {
         if(a == ArithmeticOperation.Add) {
             if(op.Operation == ProcessorRequest.Read) {
@@ -116,6 +146,11 @@ public abstract class ReplacementPolicy {
         }
     }
 
+    /**
+     * miss counter
+     * @param op
+     * @param a
+     */
     private void CountMiss(Operation op, ArithmeticOperation a) {
         if(a == ArithmeticOperation.Add) {
             if(op.Operation == ProcessorRequest.Read) {
@@ -134,6 +169,14 @@ public abstract class ReplacementPolicy {
         }
     }
 
+    /**
+     * Takes an operation and checks if it was a miss, allocate, or eviction
+     * @param op
+     * @param tag
+     * @param index
+     * @return
+     * @throws Exception
+     */
     private Tuple<Execution, Block> Execute(Operation op, String tag, int index) throws Exception {
 
         Tuple<Boolean, Block> block = this.Cache.Sets[index].TryGetBlock(tag);
@@ -157,6 +200,10 @@ public abstract class ReplacementPolicy {
         return result;
     }
 
+    /**
+     * Calculates the memory traffic from the simulation
+     * @return
+     */
     public int GetMemoryTraffic() {
         Cache firstCache = this.Arguments.Cache;
 

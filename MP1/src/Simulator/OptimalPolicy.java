@@ -3,8 +3,15 @@ package Simulator;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * Optimal policy. Checks future operations and chooses to evict that one that is farthest in the future
+ */
 public class OptimalPolicy extends ReplacementPolicy {
 
+    /**
+     * Constructor
+     * @param arguments
+     */
     public OptimalPolicy(Arguments arguments) {
         super(arguments);
         this.Latch = new CountDownLatch(1);
@@ -26,6 +33,12 @@ public class OptimalPolicy extends ReplacementPolicy {
         return "Optimal";
     }
 
+    /**
+     * Chooses the block to evict
+     * @param index
+     * @param op
+     * @return
+     */
     private Block GetBlockToEvict(int index, Operation op) {
         try {
             this.Latch.await();
@@ -69,6 +82,9 @@ public class OptimalPolicy extends ReplacementPolicy {
         return result;
     }
 
+    /**
+     * Chooses the block to evict and a new one takes its place
+     */
     @Override
     protected Block EvictAndReplace(int index, String tag, Operation op) {
         Block result = GetBlockToEvict(index, op);
@@ -76,6 +92,9 @@ public class OptimalPolicy extends ReplacementPolicy {
         return this.Cache.Sets[result.Index].Reallocate(result.Column, tag, op);
     }
 
+    /**
+     * Chooses the block to evict and empties the space
+     */
     @Override
     protected void Evict(int index, Operation op) {
         Block result = GetBlockToEvict(index, op);
@@ -84,6 +103,10 @@ public class OptimalPolicy extends ReplacementPolicy {
     }
 }
 
+/**
+ * Second thread used to calculate the indices and the tags of every operation in the trace file to make the policy faster
+ * The results will be returns in a hashtable operation -> tuple <index, tag>
+ */
 class OperationsPreprocessor implements Runnable {
 
     public ArrayList<Hashtable<Operation, Tuple<Integer, String>>> OperationsTable;
@@ -105,6 +128,10 @@ class OperationsPreprocessor implements Runnable {
         this.Latch.countDown();
     }
 
+    /**
+     * Calculates the indices and the tags of every operation in the trace file
+     * @throws InterruptedException
+     */
     private void PrepareOperations() throws InterruptedException {
         this.OperationsTable = new ArrayList<>(this.Arguments.Caches.size());
         for(int i = 0; i < this.Arguments.Caches.size(); i++) {

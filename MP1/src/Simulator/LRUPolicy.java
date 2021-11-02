@@ -2,6 +2,10 @@ package Simulator;
 
 import java.util.*;
 
+/**
+ * LRU policy. Keeps track of the usage of a block within a set and chooses the LRU for eviction.
+ * A min heap is used to speedup the process
+ */
 public class LRUPolicy extends ReplacementPolicy {
 
     public PriorityQueue<Block> MinHeap;
@@ -16,6 +20,9 @@ public class LRUPolicy extends ReplacementPolicy {
         });
     }
 
+    /**
+     * Every hit updates the counter of the set and overrides the block counter
+     */
     @Override
     protected void Hit(int index, int column) {
         this.Cache.Sets[index].Counter++;
@@ -31,21 +38,34 @@ public class LRUPolicy extends ReplacementPolicy {
         return "LRU";
     }
 
+    /**
+     * Chooses the block to evict and the new one takes its place
+     */
     @Override
     protected Block EvictAndReplace(int index, String tag, Operation op) {
-        this.MinHeap.clear();
-        this.MinHeap.addAll(Arrays.asList(this.Cache.Sets[index].Blocks));
-        Block result = this.MinHeap.poll();
+        Block result = GetBlockToEvict(index);
         this.WriteBack = result.Dirty;
         return this.Cache.Sets[result.Index].Reallocate(result.Column, tag, op);
     }
 
+    /**
+     * Chooses the block to evict and empties the space
+     */
     @Override
     protected void Evict(int index, Operation op) {
-        this.MinHeap.clear();
-        this.MinHeap.addAll(Arrays.asList(this.Cache.Sets[index].Blocks));
-        Block result = this.MinHeap.poll();
+        Block result = GetBlockToEvict(index);
         this.WriteBack = result.Dirty;
         this.Cache.Sets[result.Index].Deallocate(result.Column, result.Tag);
+    }
+
+    /**
+     * Returns the block that needs to be evicted
+     * @param index
+     * @return
+     */
+    private Block GetBlockToEvict(int index) {
+        this.MinHeap.clear();
+        this.MinHeap.addAll(Arrays.asList(this.Cache.Sets[index].Blocks));
+        return this.MinHeap.poll();
     }
 }

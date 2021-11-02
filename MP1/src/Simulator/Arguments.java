@@ -5,6 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * This class serves as the starting point of the simulator.
+ * It will parse the command line arguments, validate them, and will instantiate 
+ * the corresponding objects to start the simulation
+ */
 public class Arguments {
     public File TraceFile;
     private String[] _arguments;
@@ -16,13 +21,31 @@ public class Arguments {
     public ArrayList<Operation> Operations;
     public CountDownLatch Latch;
     
+    /**
+     * Constructor that takes the command line arguments
+     */
     public Arguments(String[] args) {
         this._arguments = args;
     }
 
+    /**
+     * Default constructor used by the experiments
+     */
     public Arguments() {
     }
 
+    /**
+     * This method is used to pass the arguments for the experiments
+     * @param blockSize
+     * @param cacheSize
+     * @param associativity
+     * @param cacheSize2
+     * @param associativity2
+     * @param replacementPolicy
+     * @param inclusionProperty
+     * @return
+     * @throws Exception
+     */
     public Arguments Load(int blockSize, int cacheSize, int associativity, 
                                           int cacheSize2, int associativity2, 
                                           int replacementPolicy, int inclusionProperty) throws Exception {
@@ -60,6 +83,11 @@ public class Arguments {
         return this;
     }
 
+    /**
+     * This method parses the String[] arguments
+     * @return
+     * @throws Exception
+     */
     public Arguments Parse() throws Exception {
         try {
 
@@ -114,6 +142,49 @@ public class Arguments {
         return this;
     }
     
+
+    /**
+     * Starts the simulation
+     * @return
+     * @throws Exception
+     */
+    public Arguments Run() throws Exception {
+        return DoRun();
+    }
+
+    /**
+     * Starts the simulation.
+     * @param print if true, it will print the configuration to the console
+     * @return
+     * @throws Exception
+     */
+    public Arguments Run(boolean print) throws Exception {
+        if(print) {
+            System.out.println(this);
+        }
+
+        return DoRun();
+    }
+
+    /**
+     * Loads the operations coming from the trace file and executes them
+     * @return
+     * @throws Exception
+     */
+    private Arguments DoRun() throws Exception {
+        this.Operations = TraceFileReader.GetOperations(this);
+
+        for(Operation op : this.Operations) {
+            this.ReplacementPolicy.Execute(this.Cache, op);
+        }
+        return this;
+    }
+
+    /**
+     * Instantiates a new replacement policy based on the configuration
+     * @param value
+     * @return
+     */
     private ReplacementPolicy GetNewPolicy(ReplacementPolicyType value) {
         switch(value) {
             case LRU:
@@ -126,6 +197,9 @@ public class Arguments {
         }
     }
 
+    /**
+     * Prints the configuration 
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -147,26 +221,5 @@ public class Arguments {
         builder.append("INCLUSION PROPERTY:\t").append(InclusionProperty.ToString(this.InclusionProperty)).append("\n");
         builder.append("trace_file:\t\t").append(this.TraceFile.getName());
         return builder.toString();
-    }
-
-    public Arguments Run() throws Exception {
-        return DoRun();
-    }
-
-    public Arguments Run(boolean print) throws Exception {
-        if(print) {
-            System.out.println(this);
-        }
-
-        return DoRun();
-    }
-
-    private Arguments DoRun() throws Exception {
-        this.Operations = TraceFileReader.GetOperations(this);
-
-        for(Operation op : this.Operations) {
-            this.ReplacementPolicy.Execute(this.Cache, op);
-        }
-        return this;
     }
 }

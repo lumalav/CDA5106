@@ -1,5 +1,8 @@
 package Simulator;
 
+/**
+ * Cache instance arguments
+ */
 public class CacheArguments {
     public int Level, BlockSize, CacheSize, Associativity;
     public Arguments Arguments;

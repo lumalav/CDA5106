@@ -3,6 +3,7 @@ DEBUG = -g
 CLASSES = \
 	src/Simulator/*.java
 sim_cache:
+	mkdir bin/
 	$(JAVAC) -d bin/ $(CLASSES)
 	jar cfm sim_cache.jar src/Simulator/META-INF/MANIFEST.MF -C bin/ .
 	@echo "To Run the simulator, please enter: java -cp sim_cache.jar Simulator.MP1 'args'"

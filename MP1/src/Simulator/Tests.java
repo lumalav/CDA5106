@@ -2,6 +2,10 @@ package Simulator;
 
 import java.util.*;
 
+/**
+ * LRU and PLRU tests
+ * TODO: Optimal tests
+ */
 public class Tests {
     public static void TestLRU() throws Exception {
         LRUPolicy policy = new LRUPolicy(null);

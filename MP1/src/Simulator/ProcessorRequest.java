@@ -1,5 +1,8 @@
 package Simulator;
 
+/**
+ * Represents the type of operation coming from the trace file
+ */
 public enum ProcessorRequest {
     Read,
     Write;

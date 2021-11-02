@@ -1,5 +1,10 @@
 package Simulator;
 
+/**
+ * This class represents the cache. 
+ * It takes the arguments and instantiates and array of sets.
+ * It also holds the information on how to extract the Index, the tag, and the offset bits from a particular address
+ */
 public class Cache {
     private int _tagBits, _indexBits, _offsetBits;
     public int SetCount, Reads, ReadMisses, WriteBacks, Writes, WriteMisses, ExtraWork; 
@@ -9,6 +14,10 @@ public class Cache {
     public int Level;
     public CacheArguments Arguments;
 
+    /**
+     * Constructor
+     * @param arguments
+     */
     public Cache(CacheArguments arguments) {
         this.Arguments = arguments;
         this.SetCount = arguments.CacheSize/(arguments.BlockSize*arguments.Associativity);
@@ -22,18 +31,32 @@ public class Cache {
         }
     }
 
+    /**
+     * Returns the tag from the given hex address operation
+     * @param operation 
+     * @return
+     */
     public String GetTag(Operation operation) {
         String binary = operation.GetBinaryAddress();
         String tag = binary.substring(0, this._tagBits);
         return Integer.toString(Integer.parseInt(tag, 2), 16);
     }
 
+    /**
+     * Returns the indes from the given hex address operation
+     * @param operation
+     * @return
+     */
     public int GetIndex(Operation operation) {
         String binary = operation.GetBinaryAddress();
         String index = binary.substring(this._tagBits, this._tagBits + this._indexBits);
         return Integer.parseInt(index, 2);
     }
 
+    /**
+     * Returns the miss rate of the cache
+     * @return
+     */
     public double GetMissRate() {
 
         int all = this.Writes + this.Reads;
@@ -49,10 +72,20 @@ public class Cache {
         return this.ReadMisses / (double) this.Reads;
     }
 
+
+    /**
+     * Returns the memory traffic of the cache
+     * @return
+     */
     public int GetMemoryTraffic() {
         return this.ReadMisses + this.WriteMisses + this.WriteBacks;
     }
 
+    /**
+     * Returns the average access time of the cache.
+     * @param value cacti value is required
+     * @return
+     */
     public double GetAAT(double value) {
         double den = this.Reads + this.Writes;
         if(den == 0) {
@@ -64,6 +97,9 @@ public class Cache {
         return num / den;
     }
 
+    /**
+     * Prints the contents of the cache
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

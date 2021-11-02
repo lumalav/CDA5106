@@ -1,6 +1,9 @@
 package Simulator;
 import java.text.DecimalFormat;
 
+/**
+ * Main class. Takes the arguments, calls the corresponding functions and prints the results
+ */
 public class MP1 {
 
     private static Arguments _arguments;
@@ -11,6 +14,9 @@ public class MP1 {
         PrintResults();
     }
 
+    /**
+     * Prints the results from the simulation
+     */
     private static void PrintResults() {
 
         DecimalFormat dec = new DecimalFormat("#0.000000");

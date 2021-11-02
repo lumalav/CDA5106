@@ -1,5 +1,8 @@
 package Simulator;
 
+/**
+ * Represents the two types of inclusivity supported by the cache
+ */
 public enum InclusionProperty {
     NonInclusive,
     Inclusive;

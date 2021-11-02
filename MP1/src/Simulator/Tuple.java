@@ -1,5 +1,8 @@
 package Simulator;
 
+/**
+ * Tuple class
+ */
 public class Tuple<X, Y> {
     public final X Item1;
     public final Y Item2;

@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Reads a trace file and returns the list of operations
+ */
 public class TraceFileReader {
     
     public static ArrayList<Operation> GetOperations(Arguments arguments) throws IOException {

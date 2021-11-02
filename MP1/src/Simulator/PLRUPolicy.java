@@ -2,12 +2,21 @@ package Simulator;
 
 public class PLRUPolicy extends ReplacementPolicy {
 
-    PLRUTree[][] Trees;
+    private PLRUTree[][] Trees;
+
+    /**
+     * Constructor
+     * @param arguments
+     */
     public PLRUPolicy(Arguments arguments) {
         super(arguments);
         this.Trees = new PLRUTree[arguments.Caches.size() + 1][];
     }
 
+    /**
+     * Instantiates a new Plru tree for a specific set
+     * @param index
+     */
     private void InitIfNeeded(int index) {
         if (this.Trees[this.Cache.Level] == null) {
             this.Trees[this.Cache.Level] = new PLRUTree[this.Cache.SetCount];
@@ -18,12 +27,18 @@ public class PLRUPolicy extends ReplacementPolicy {
         } 
     }
 
+    /**
+     * Every hit, flips the bits
+     */
     @Override
     protected void Hit(int index, int column) {
         InitIfNeeded(index);
         this.Trees[this.Cache.Level][index].Hit(column);
     }
 
+    /**
+     * Every new allocation, flips the bits
+     */
     @Override
     protected void Allocate(int index, int column) {
         InitIfNeeded(index);
@@ -35,6 +50,9 @@ public class PLRUPolicy extends ReplacementPolicy {
         return "Pseudo-LRU";
     }
 
+    /**
+     * Chooses the block to evict and a new one takes its place
+     */
     @Override
     protected Block EvictAndReplace(int index, String tag, Operation op) {
         InitIfNeeded(index);
@@ -46,6 +64,9 @@ public class PLRUPolicy extends ReplacementPolicy {
         return r2;
     }
 
+    /**
+     * Chooses the block to evict and empties the space
+     */
     @Override
     protected void Evict(int index, Operation op) {
         int column = this.Trees[this.Cache.Level][index].GetLRU();

@@ -1,5 +1,8 @@
 package Simulator;
 
+/**
+ * Helper class to calculate the Log_2
+ */
 public class Helpers {
     
     public static int Log2(int number) {

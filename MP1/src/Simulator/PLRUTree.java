@@ -1,10 +1,18 @@
 package Simulator;
 
+/**
+ * Represents a PLRU tree.
+ * Takes a specific set of the cache and keeps track of the block usage
+ */
 public class PLRUTree {
     Node[] Tree;
     private int Height, Column, NodeIndex;
     private Node[] LastLevel;
 
+    /**
+     * Constructor
+     * @param associativity
+     */
     public PLRUTree(int associativity) {
         this.LastLevel = new Node[associativity];
         this.Height = Helpers.Log2(associativity);
@@ -14,6 +22,13 @@ public class PLRUTree {
         Initialize(null, 0, 0, -1);
     }
 
+    /**
+     * Initializes the PLRU tree
+     * @param parent
+     * @param index
+     * @param level
+     * @param direction
+     */
     private void Initialize(Node parent, int index, int level, int direction) {
         if (index < this.Tree.length) {
             Node node = new Node();
@@ -39,6 +54,10 @@ public class PLRUTree {
         }
     }
 
+    /**
+     * Bits need to be flipped everytime a hit happens
+     * @param column
+     */
     public void Hit(int column) {
         Node node = this.LastLevel[column];
         Node parent = node.Parent;
@@ -49,18 +68,26 @@ public class PLRUTree {
         }
     }
 
+    /**
+     * Prints the contents of the tree
+     */
     public void PrintFlipBits() {
-        PrintFlipBits(this.Tree[0]);
+        System.out.println(this.Tree[0].toString());
     }
 
+    /**
+     * Traverses the PLRU tree and returns the LRU
+     * @return
+     */
     public int GetLRU() {
         return GetLRU(this.Tree[0]);
     }
 
-    private void PrintFlipBits(Node node) {
-        System.out.println(node.toString());
-    }
-
+    /**
+     * Recursively traverses the tree in the opposite direction to get the LRU
+     * @param node
+     * @return
+     */
     private int GetLRU(Node node) {
         if(node.Left == null && node.Right == null) {
             return node.Column;
@@ -73,6 +100,9 @@ public class PLRUTree {
     }
 }
 
+/**
+ * Represents a node of the PLRU Tree
+ */
 class Node {
     public Node Parent;
     public Node Left;
@@ -83,6 +113,9 @@ class Node {
     public int Index;
     public int Height;
 
+    /**
+     * Prints the contents of the Tree recursively
+     */
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder(50);
@@ -90,6 +123,9 @@ class Node {
         return buffer.toString();
     }
 
+    /**
+     * Prints the contents of a node and their children
+     */
     private void Print(StringBuilder buffer, String prefix, String childrenPrefix) {
 
         if(this.Level >= this.Height) {
@@ -108,6 +144,9 @@ class Node {
         }
     }
 
+    /**
+     * Checks if two nodes are the same, based on position and not contents
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) 

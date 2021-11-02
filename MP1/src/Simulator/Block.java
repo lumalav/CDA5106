@@ -1,5 +1,8 @@
 package Simulator;
 
+/**
+ * This class represents a block in a set
+ */
 public class Block {
     public String Tag;
     public int Column;
@@ -8,6 +11,9 @@ public class Block {
     public String Address;
     public int Index;
 
+    /**
+     * Used to store blocks in hash structures
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -19,6 +25,9 @@ public class Block {
         return result;
     }
     
+    /**
+     * Checks if two blocks are the same
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) 
@@ -33,6 +42,9 @@ public class Block {
                         this.Address.equals(other.Address);
     }
 
+    /**
+     * Prints the contents of the block 
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
