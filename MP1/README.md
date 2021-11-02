@@ -4,9 +4,9 @@ To build from the command line:
 
 - From Unix command line: 
 
-> `cd MP1`
+`cd MP1`
 
-> `make`
+`make`
 
 - From Windows command line:
 
@@ -14,15 +14,15 @@ Please alter the makefile and make sure the folder character is the back-slash '
 
 To Execute:
 
-> `java -cp sim_cache.jar Simulator.MP1 'args'` 
+`java -cp sim_cache.jar Simulator.MP1 'args'` 
 
 Example:
 
-> `java -cp sim_cache.jar Simulator.MP1 16 1024 2 0 0 0 0 gcc_trace.txt`
+`java -cp sim_cache.jar Simulator.MP1 16 1024 2 0 0 0 0 gcc_trace.txt`
 
 To clean:
 
-> `make clean`
+`make clean`
 
 To build and execute from Visual Studio code
 
