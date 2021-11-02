@@ -5,6 +5,7 @@ To build and execute from the command line
 > From Unix command line: 
 
 `cd MP1`
+
 `make`
 
 > From Windows command line:
