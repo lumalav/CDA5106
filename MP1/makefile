@@ -11,4 +11,5 @@ sim_cache:
 	@echo "java -cp sim_cache.jar Simulator.MP1 16 1024 2 0 0 0 0 gcc_trace.txt"
 clean:
 	$(RM) bin/**/*.class
+	$(RM) bin/ -r
 	$(RM) sim_cache.jar
