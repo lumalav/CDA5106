@@ -4,8 +4,8 @@ To build and execute from the command line
 
 > From Unix command line: 
 
-- `cd MP1`
-- `make`
+`cd MP1`
+`make`
 
 > From Windows command line:
 
@@ -17,7 +17,7 @@ To build and execute from the command line
 
 > To clean:
 
-- `make clean`
+`make clean`
 
 To build and execute from Visual Studio code
 
