@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Smith",
+            "request": "launch",
+            "mainClass": "Simulator.MP2",
+            "args": "smith 4 traces\\perl_trace.txt"
+        },
+        {
+            "type": "java",
+            "name": "Smith",
+            "request": "launch",
+            "mainClass": "Experiments.Main",
+            "args": ""
+        }
+    ]
+}
