@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Smith",
+            "request": "launch",
+            "mainClass": "Simulator.MP3",
+            "args": "hybrid 8 14 10 5 traces\\gcc_trace.txt"
+        },
+        {
+            "type": "java",
+            "name": "Smith",
+            "request": "launch",
+            "mainClass": "Experiments.Main",
+            "args": ""
+        }
+    ]
+}
