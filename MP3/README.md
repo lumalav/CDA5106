@@ -21,10 +21,4 @@ To build and execute from the command line
 
 To build and execute from Visual Studio code
 
-- Open MP1 folder with Visual Studio code and add the arguments to the launch.json file
-
-Experiments:
-
-Dependencies:
-
-> [XChart](https://github.com/knowm/XChart)
+- Open MP3 folder with Visual Studio code and add the arguments to the launch.json file
