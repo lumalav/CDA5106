@@ -20,7 +20,7 @@ public class GsharePolicy extends PredictionPolicy {
             this._m1 = arguments.PolicyArguments[1];
             this._n = arguments.PolicyArguments[2];
         }
-        
+
         int size = (int)Math.pow(2, this._m1);
         this._mask = size - 1;
         this.BranchPredictor = new ArrayList<>(size);

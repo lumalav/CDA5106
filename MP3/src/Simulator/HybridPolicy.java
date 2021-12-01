@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class HybridPolicy extends PredictionPolicy {
 
-    private BimodalPolicy _bPolicy;
-    private GsharePolicy _gPolicy;
+    public BimodalPolicy BimodalPolicy;
+    public GsharePolicy GSharePolicy;
     private int _k, _mask;
 
     public HybridPolicy(Arguments arguments) {
         super(arguments);
         this.Type = PredictionPolicyType.Hybrid;
         this._k = arguments.PolicyArguments[0];
-        this._bPolicy = new BimodalPolicy(arguments, false);
-        this._gPolicy = new GsharePolicy(arguments, false);
+        this.BimodalPolicy = new BimodalPolicy(arguments, false);
+        this.GSharePolicy = new GsharePolicy(arguments, false);
         int size = (int)Math.pow(2, this._k);
         this._mask = size - 1;
         this.BranchPredictor = new ArrayList<>(size);
@@ -35,21 +35,21 @@ public class HybridPolicy extends PredictionPolicy {
 
     @Override
     protected boolean Predict(Branch b) {
-        Action bPrediction = this._bPolicy.PerformPrediction(b);
-        Action gPrediction = this._gPolicy.PerformPrediction(b);
+        Action bPrediction = this.BimodalPolicy.PerformPrediction(b);
+        Action gPrediction = this.GSharePolicy.PerformPrediction(b);
         int index = GetIndex(b.GetParsedAddress());
         SmithCounter c = this.BranchPredictor.get(index);
-        boolean result;
-        boolean bCorrect = false,gCorrect = false;
+        boolean result, 
+            bCorrect = bPrediction == b.Actual,
+            gCorrect = gPrediction == b.Actual;
+
         if(c.Counter < 2) {
-            result = bPrediction == b.Actual;
-            bCorrect = result;
-            this._gPolicy.UpdateGhbr(b.Actual == Action.Taken ? 1 : 0);
-            this._bPolicy.Predict(b);
+            result = bCorrect;
+            this.GSharePolicy.UpdateGhbr(b.Actual == Action.Taken ? 1 : 0);
+            this.BimodalPolicy.Execute(b);
         } else {
-            result = gPrediction == b.Actual;
-            gCorrect = result;
-            this._gPolicy.Predict(b);
+            result = gCorrect;
+            this.GSharePolicy.Execute(b);
         }
 
         if(bCorrect && !gCorrect) {

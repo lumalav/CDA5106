@@ -34,19 +34,12 @@ public abstract class PredictionPolicy {
         return this._mispredictions/(double)this.Arguments.Branches.size();
     }
 
-    @Override
-    public String toString() {
-        DecimalFormat dec = new DecimalFormat("#0.00%");
-        StringBuilder builder = new StringBuilder();
-        builder.append("number of predictions:\t\t").append(this.Arguments.Branches.size()).append("\n");
-        builder.append("number of mispredictions:\t").append(this._mispredictions).append("\n");
-        builder.append("misprediction rate:\t\t").append(dec.format(GetMispredictionRate())).append("\n");
-
+    public StringBuilder GetFinalContents(StringBuilder builder) {
         switch(Type) {
             case Hybrid:
             case Bimodal:
             case Gshare:
-            builder.append("FINAL ").append(GetName()).append(" CONTENTS\n");
+            builder.append(Type == PredictionPolicyType.Hybrid ? "" : "\n").append("FINAL ").append(GetName()).append(" CONTENTS\n");
             int index = 0;
             for (SmithCounter smithCounter : BranchPredictor) {
                 builder.append(index++).append("\t\t").append(smithCounter.Counter).append("\n");
@@ -56,6 +49,25 @@ public abstract class PredictionPolicy {
             default:
             builder.append("FINAL COUNTER CONTENT:\t\t").append(this.BranchPredictor.get(this.BranchPredictor.size()-1).Counter);
             break;
+        }
+
+        return builder;
+    }
+
+    @Override
+    public String toString() {
+        DecimalFormat dec = new DecimalFormat("#0.00%");
+        StringBuilder builder = new StringBuilder();
+        builder.append("number of predictions:\t\t").append(this.Arguments.Branches.size()).append("\n");
+        builder.append("number of mispredictions:\t").append(this._mispredictions).append("\n");
+        builder.append("misprediction rate:\t\t").append(dec.format(GetMispredictionRate())).append("\n");
+
+        GetFinalContents(builder);
+
+        if(Type == PredictionPolicyType.Hybrid) {
+            HybridPolicy h = (HybridPolicy)this;
+            h.GSharePolicy.GetFinalContents(builder);
+            h.BimodalPolicy.GetFinalContents(builder);
         }
 
         return builder.toString();
